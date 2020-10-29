@@ -87,6 +87,7 @@ static RT_MODEL_VoltageToPressure_T VoltageToPressure_M_;
 RT_MODEL_VoltageToPressure_T *const VoltageToPressure_M = &VoltageToPressure_M_;
 
 /* Model step function */
+//void VoltageToPressure_step(uint16_T  temp, uint16_T pressure)
 void VoltageToPressure_step(void)
 {
   int32_T tmp;

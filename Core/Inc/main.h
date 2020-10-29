@@ -35,6 +35,8 @@ extern "C" {
 	#include "SetActiveLedsApplication.h"
 	#include "BlinkingLedsApplication.h"
 	#include "ADCReadSimulationApplication.h"
+	#include "ADCReadVolInSimulationApplication.h"
+	#include "ert_main.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

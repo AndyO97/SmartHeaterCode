@@ -18,7 +18,7 @@
  *    2. Debugging
  * Validation result: Passed (8), Warning (1), Error (0)
  */
-
+#include "ert_main.h"
 #include <stddef.h>
 #include <stdio.h>              /* This ert_main.c example uses printf/fflush */
 #include "VoltageToPressure.h"         /* Model's header file */
@@ -67,17 +67,19 @@ void rt_OneStep(void)
   /* Enable interrupts here */
 }
 
+
 /*
  * The example "main" function illustrates what is required by your
  * application code to initialize, execute, and terminate the generated code.
  * Attaching rt_OneStep to a real-time clock is target specific.  This example
  * illustrates how you do this relative to initializing the model.
  */
-int_T main(int_T argc, const char *argv[])
+int_T mainMBSD(int_T argc, const char *argv[])
 {
   /* Unused arguments */
   (void)(argc);
   (void)(argv);
+	
 
   /* Initialize model */
   VoltageToPressure_initialize();
@@ -88,7 +90,11 @@ int_T main(int_T argc, const char *argv[])
    *
    *  rt_OneStep();
    */
-  VoltageToPressure_step();  //Added this line to test
+	uint16_T temperature;
+	uint16_T state;
+	VoltageToPressure_step();  //Added this line to test
+  //VoltageToPressure_step(temperature, state);  //Added this line to test
+	VoltageToPressure_step(); 
   printf("Warning: The simulation will run forever. "
          "Generated ERT main won't simulate model step behavior. "
          "To change this behavior select the 'MAT-file logging' option.\n");

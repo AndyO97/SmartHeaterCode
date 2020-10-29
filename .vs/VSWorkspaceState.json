@@ -2,8 +2,13 @@
   "ExpandedNodes": [
     "",
     "\\Core",
-    "\\Core\\Src"
+    "\\Core\\Inc",
+    "\\Core\\Src",
+    "\\MDK-ARM",
+    "\\MDK-ARM\\Application",
+    "\\MDK-ARM\\Application\\Include",
+    "\\MDK-ARM\\Application\\Source"
   ],
-  "SelectedNode": "\\Core\\Src\\main.c",
+  "SelectedNode": "\\MDK-ARM\\Application\\Source\\ADCReadVolInSimulationApplication.c",
   "PreviewInSolutionExplorer": false
 }

@@ -86,6 +86,20 @@ const osThreadAttr_t ADCRead_attributes = {
   .cb_size = sizeof(ADCReadControlBlock),
   .priority = (osPriority_t) osPriorityLow,
 };
+
+/* Definitions for ADCReadVolIn */
+osThreadId_t ADCReadVolInHandle;
+uint32_t ADCReadVolInBuffer[ 128 ];
+osStaticThreadDef_t ADCReadVolInControlBlock;
+const osThreadAttr_t ADCReadVolIn_attributes = {
+  .name = "ADCReadVolIn",
+  .stack_mem = &ADCReadVolInBuffer[0],
+  .stack_size = sizeof(ADCReadVolInBuffer),
+  .cb_mem = &ADCReadControlBlock,
+  .cb_size = sizeof(ADCReadVolInControlBlock),
+  .priority = (osPriority_t) osPriorityLow,
+};
+
 /* Definitions for SetActiveLed */
 osThreadId_t SetActiveLedHandle;
 uint32_t SetActiveLedBuffer[ 128 ];
@@ -100,10 +114,15 @@ const osThreadAttr_t SetActiveLed_attributes = {
 };
 /* Definitions for measureTemp */
 osThreadId_t measureTempHandle;
+uint32_t measureTempBuffer[ 128 ];
+osStaticThreadDef_t measureTempControlBlock;
 const osThreadAttr_t measureTemp_attributes = {
   .name = "measureTemp",
-  .priority = (osPriority_t) osPriorityNormal,
-  .stack_size = 128 * 4
+	.stack_mem = &measureTempBuffer[0],
+  .stack_size = sizeof(measureTempBuffer),
+  .cb_mem = &measureTempControlBlock,
+  .cb_size = sizeof(measureTempControlBlock),
+  .priority = (osPriority_t) osPriorityLow,
 };
 /* Definitions for ShortCircuit */
 osThreadId_t ShortCircuitHandle;
@@ -141,6 +160,32 @@ const osMessageQueueAttr_t AnalogReadValueQueue_attributes = {
   .mq_mem = &AnalogReadValueBuffer,
   .mq_size = sizeof(AnalogReadValueBuffer)
 };
+
+/* Definitions for AnalogReadVolInValueQueue */
+osMessageQueueId_t AnalogReadVolInValueQueueHandle;
+uint8_t AnalogReadVolInValueBuffer[ 16 * sizeof( uint16_t ) ];
+osStaticMessageQDef_t AnalogReadVolInValueControlBlock;
+const osMessageQueueAttr_t AnalogReadVolInValueQueue_attributes = {
+  .name = "AnalogReadValueQueue",
+  .cb_mem = &AnalogReadValueControlBlock,
+  .cb_size = sizeof(AnalogReadValueControlBlock),
+  .mq_mem = &AnalogReadValueBuffer,
+  .mq_size = sizeof(AnalogReadValueBuffer)
+};
+
+/* Definitions for measureTempValueQueue */
+osMessageQueueId_t measureTempValueQueueHandle;
+uint8_t measureTempValueBuffer[ 16 * sizeof( uint16_t ) ];
+osStaticMessageQDef_t measureTempValueControlBlock;
+const osMessageQueueAttr_t measureTempValueQueue_attributes = {
+  .name = "measureTempValueQueue",
+  .cb_mem = &measureTempValueControlBlock,
+  .cb_size = sizeof(measureTempValueControlBlock),
+  .mq_mem = &measureTempValueBuffer,
+  .mq_size = sizeof(measureTempValueBuffer)
+};
+
+
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -157,6 +202,7 @@ static void MX_RTC_Init(void);
 static void MX_USART2_UART_Init(void);
 void StartLedTask(void *argument);
 void StartADCRead(void *argument);
+void StartADCReadVolIn(void *argument);
 void StartSetActiveLed(void *argument);
 void StartTemperature(void *argument);
 void StartShortCircuit(void *argument);
@@ -231,6 +277,12 @@ int main(void)
 
   /* creation of AnalogReadValueQueue */
   AnalogReadValueQueueHandle = osMessageQueueNew (16, sizeof(uint16_t), &AnalogReadValueQueue_attributes);
+	
+	/* creation of AnalogReadVolInValueQueue */
+  AnalogReadVolInValueQueueHandle = osMessageQueueNew (16, sizeof(uint16_t), &AnalogReadVolInValueQueue_attributes);
+	
+	/* creation of measureTempValueQueue */
+  measureTempValueQueueHandle = osMessageQueueNew (16, sizeof(uint16_t), &measureTempValueQueue_attributes);
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
@@ -242,6 +294,9 @@ int main(void)
 
   /* creation of ADCRead */
   ADCReadHandle = osThreadNew(StartADCRead, NULL, &ADCRead_attributes);
+	
+	/* creation of ADCReadVolIn */
+  ADCReadVolInHandle = osThreadNew(StartADCReadVolIn, NULL, &ADCReadVolIn_attributes);
 
   /* creation of SetActiveLed */
   SetActiveLedHandle = osThreadNew(StartSetActiveLed, NULL, &SetActiveLed_attributes);
@@ -743,6 +798,20 @@ void StartADCRead(void *argument)
   /* USER CODE END StartADCRead */
 }
 
+void StartADCReadVolIn(void *argument)
+{
+  /* USER CODE BEGIN StartADCRead */
+	uint16_t analogValueVolIn;
+  /* Infinite loop */
+  for(;;)
+  {
+		analogValueVolIn=ADCReadVolInSimulationApp();
+		osMessageQueuePut(AnalogReadVolInValueQueueHandle, &analogValueVolIn, ZERO, ZERO );
+    osDelay(ADC_READ_SIMULATION_TASK_PERIOD_TICKS);
+  }
+  /* USER CODE END StartADCRead */
+}
+
 /* USER CODE BEGIN Header_StartSetActiveLed */
 /**
 * @brief Function implementing the SetActiveLed thread.
@@ -792,10 +861,14 @@ void StartSetActiveLed(void *argument)
 void StartTemperature(void *argument)
 {
   /* USER CODE BEGIN StartTemperature */
+	uint16_t temperature;
+	uint16_t state;
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+    temperature=ert_main();
+		osMessageQueuePut(measureTempValueQueueHandle, &temperature, ZERO, ZERO );
+    osDelay(ADC_READ_SIMULATION_TASK_PERIOD_TICKS);
   }
   /* USER CODE END StartTemperature */
 }
