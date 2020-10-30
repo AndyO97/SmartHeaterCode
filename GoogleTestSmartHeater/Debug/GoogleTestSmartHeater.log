@@ -1,0 +1,8 @@
+﻿  fmiErrors.c
+C:\Users\andy_\Downloads\FreeRTOSv10.4.1\FreeRTOSv10.4.1\FreeRTOS\Demo\GoogleTestSmartHeater\fmiErrors.c(49,42): warning C4013: 'volt_to_C' undefined; assuming extern returning int
+C:\Users\andy_\Downloads\FreeRTOSv10.4.1\FreeRTOSv10.4.1\FreeRTOS\Demo\GoogleTestSmartHeater\fmiErrors.c(49,55): warning C4013: 'bits_to_volt' undefined; assuming extern returning int
+C:\Users\andy_\Downloads\FreeRTOSv10.4.1\FreeRTOSv10.4.1\FreeRTOS\Demo\GoogleTestSmartHeater\fmiErrors.c(95,32): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+  test.cpp
+C:\Users\andy_\Downloads\FreeRTOSv10.4.1\FreeRTOSv10.4.1\FreeRTOS\Demo\GoogleTestSmartHeater\AdcToTemperature.c(43,19): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\andy_\Downloads\FreeRTOSv10.4.1\FreeRTOSv10.4.1\FreeRTOS\Demo\GoogleTestSmartHeater\fmiErrors.c(95,19): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+  GoogleTestSmartHeater.vcxproj -> C:\Users\andy_\Downloads\FreeRTOSv10.4.1\FreeRTOSv10.4.1\FreeRTOS\Demo\WIN32-MSVC\Debug\GoogleTestSmartHeater.exe

@@ -1,0 +1,1 @@
+C:\Users\andy_\Downloads\FreeRTOSv10.4.1\FreeRTOSv10.4.1\FreeRTOS\Demo\GoogleTestSmartHeater\Debug\GoogleTestSmartHeater.vcxproj.CopyComplete

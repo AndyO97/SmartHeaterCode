@@ -683,9 +683,9 @@
               <FilePath>.\Application\Include\SetActiveLedsApplication.h</FilePath>
             </File>
             <File>
-              <FileName>ADCReadVolInSimulationApplication.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Application\Source\ADCReadVolInSimulationApplication.c</FilePath>
+              <FileName>ADCReadVolInSimulationApplication.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Application\Include\ADCReadVolInSimulationApplication.h</FilePath>
             </File>
           </Files>
         </Group>
